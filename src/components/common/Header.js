@@ -1,10 +1,13 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+// Library Imports
 import React from 'react';
-import {colors, styles} from '../../themes';
-import Text from './Text';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-export default function Header(props) {
+// Local Imports
+import {colors, styles} from '../../themes';
+import Text from './Text';
+
+function Header(props) {
   const {title, isBack} = props;
   const navigation = useNavigation();
 
@@ -25,6 +28,8 @@ export default function Header(props) {
     </View>
   );
 }
+
+export default React.memo(Header);
 
 const localStyles = StyleSheet.create({
   container: {

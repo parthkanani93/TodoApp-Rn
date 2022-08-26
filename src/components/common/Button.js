@@ -1,18 +1,14 @@
+// Library Import
 import React from 'react';
 import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
+
+// Local Import
 import {moderateScale} from '../../common/constants';
 import {colors, styles} from '../../themes';
 import Text from './Text';
 
-const Button = ({
-  title,
-  onPress,
-  containerStyle,
-  type,
-  TextColor,
-  loading,
-  ...props
-}) => {
+const Button = props => {
+  const {title, onPress, containerStyle, type, textColor, loading} = props;
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -23,7 +19,7 @@ const Button = ({
       {loading ? (
         <ActivityIndicator size="large" color={colors.border} />
       ) : (
-        <Text type={type} align="center" color={TextColor}>
+        <Text type={type} align="center" color={textColor}>
           {title}
         </Text>
       )}

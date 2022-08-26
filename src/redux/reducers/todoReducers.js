@@ -1,5 +1,6 @@
 import {ADD_TODO, REMOVE_TODO, EDIT_TODO} from '../types';
 
+// initial state
 const INITIAL_STATE = {
   todos: [
     {
@@ -9,6 +10,7 @@ const INITIAL_STATE = {
   ],
 };
 
+// Todo Reducer
 const todoReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case REMOVE_TODO:

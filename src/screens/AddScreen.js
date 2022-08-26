@@ -1,29 +1,34 @@
-import React, {memo, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {View, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
-import {
-  addNewToDoAction,
-  editTodoAction,
-  removeTodoAction,
-} from '../redux/actions/todoActions';
+// Library Import
+import React, {useEffect, useMemo, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {View, StyleSheet} from 'react-native';
+
+// Local Import
 import {colors, styles} from '../themes';
 import Header from '../components/common/Header';
-import {Button, Input, Text} from '../components';
-import {moderateScale} from '../common/constants';
-import {showPopupWithOk, showPopupWithOkAndCancel} from '../utils/helpers';
+import {Button, Input} from '../components';
+import {showPopupWithOk} from '../utils/helpers';
 import strings from '../utils/constant';
 
-const Todo = ({navigation, route}) => {
+// Redux Actions
+import {addNewToDoAction, editTodoAction} from '../redux/actions/todoActions';
+
+const Todo = props => {
+  const {navigation, route} = props;
   const [todoValue, setTodoValue] = useState('');
+  // Redux Action Dispatcher
   const dispatch = useDispatch();
+  // Todo item get from route params
   const item = route.params?.item;
 
+  // It todo item is get then set to the initial state
   useEffect(() => {
     if (item) {
       setTodoValue(item.text);
     }
   }, []);
 
+  // onPress Add-save Todo Press
   const addTodoPress = () => {
     if (item) {
       if (todoValue.trim()) {
@@ -47,6 +52,22 @@ const Todo = ({navigation, route}) => {
     }
   };
 
+  //Add-Save Todo button
+  const TodoButton = useMemo(() => {
+    return (
+      <Button
+        title={item ? strings.save : strings.addTodo}
+        onPress={addTodoPress}
+        type={'M24'}
+        textColor={colors.white}
+        containerStyle={localStyles.addTodoBtn}
+      />
+    );
+  }, [item, todoValue]);
+
+  // handle input text change
+  const onHandleInputChange = text => setTodoValue(text);
+
   return (
     <View style={styles.mainContainer}>
       <Header isBack title={item ? strings.editTodo : strings.addTodo} />
@@ -54,15 +75,9 @@ const Todo = ({navigation, route}) => {
         <Input
           value={todoValue}
           placeholder={strings.addTodoHere}
-          onChangeText={text => setTodoValue(text)}
+          onChangeText={onHandleInputChange}
         />
-        <Button
-          title={item ? strings.save : strings.addTodo}
-          onPress={addTodoPress}
-          type={'M24'}
-          TextColor={colors.white}
-          containerStyle={localStyles.addTodoBtn}
-        />
+        {TodoButton}
       </View>
     </View>
   );
