@@ -1,18 +1,17 @@
-import {ADD_TODO, REMOVE_TODO, EDIT_TODO} from '../types';
+import {ADD_TODO, REMOVE_TODO, EDIT_TODO, ADD_FIRESTORE_DATA} from '../types';
 
 // initial state
 const INITIAL_STATE = {
-  todos: [
-    {
-      id: 1,
-      text: 'Learn React Native',
-    },
-  ],
+  todos: [],
 };
 
 // Todo Reducer
 const todoReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case ADD_FIRESTORE_DATA:
+      return {
+        todos: action.payload,
+      };
     case REMOVE_TODO:
       return {
         ...state,
@@ -21,16 +20,9 @@ const todoReducer = (state = INITIAL_STATE, action) => {
     case ADD_TODO:
       return {
         ...state,
-        todos: [
-          ...state.todos,
-          {
-            id: Math.random(),
-            text: action.payload,
-          },
-        ],
+        todos: [...state.todos, action.payload],
       };
     case EDIT_TODO:
-      console.log(action.payload);
       return {
         ...state,
         todos: state.todos.map(todo => {

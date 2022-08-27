@@ -1,4 +1,12 @@
-import {ADD_TODO, EDIT_TODO, REMOVE_TODO} from '../types';
+import {ADD_TODO, EDIT_TODO, REMOVE_TODO, ADD_FIRESTORE_DATA} from '../types';
+
+// Set FireStore Data
+const addFireStoreDataAction = value => {
+  return {
+    type: ADD_FIRESTORE_DATA,
+    payload: value,
+  };
+};
 
 // Add NeW Todo Item
 const addNewToDoAction = value => {
@@ -25,4 +33,9 @@ const editTodoAction = value => {
 };
 
 //Export All Actions
-export {addNewToDoAction, removeTodoAction, editTodoAction};
+export {
+  addFireStoreDataAction,
+  addNewToDoAction,
+  removeTodoAction,
+  editTodoAction,
+};

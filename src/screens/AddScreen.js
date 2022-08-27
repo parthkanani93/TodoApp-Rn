@@ -12,6 +12,7 @@ import strings from '../utils/constant';
 
 // Redux Actions
 import {addNewToDoAction, editTodoAction} from '../redux/actions/todoActions';
+import {addTodoItem, updateTodoItem} from '../services/FireStore';
 
 const Todo = props => {
   const {navigation, route} = props;
@@ -24,28 +25,41 @@ const Todo = props => {
   // It todo item is get then set to the initial state
   useEffect(() => {
     if (item) {
-      setTodoValue(item.text);
+      setTodoValue(item.task);
     }
   }, []);
 
   // onPress Add-save Todo Press
-  const addTodoPress = () => {
+  const addTodoPress = async () => {
     if (item) {
       if (todoValue.trim()) {
-        dispatch(
-          editTodoAction({
-            id: item.id,
-            text: todoValue.trim(),
-          }),
-        );
-        navigation.goBack();
+        const editTodoData = {
+          id: item.id,
+          task: todoValue.trim(),
+        };
+        const {success, error} = await updateTodoItem(item.id, editTodoData);
+        if (success) {
+          dispatch(editTodoAction(editTodoData));
+          navigation.goBack();
+        } else {
+          showPopupWithOk(strings.editTodo, error);
+        }
       } else {
         showPopupWithOk(strings.removeTodo, strings.emptyTodo);
       }
     } else {
       if (todoValue.trim()) {
-        dispatch(addNewToDoAction(todoValue.trim()));
-        navigation.goBack();
+        const addTodoData = {
+          id: Math.random(),
+          task: todoValue.trim(),
+        };
+        const {success, error} = await addTodoItem(addTodoData);
+        if (success) {
+          dispatch(addNewToDoAction(addTodoData));
+          navigation.goBack();
+        } else {
+          showPopupWithOk(strings.addTodo, error);
+        }
       } else {
         showPopupWithOk(strings.removeTodo, strings.emptyTodo);
       }
@@ -83,6 +97,7 @@ const Todo = props => {
   );
 };
 
+// Local Styles
 const localStyles = StyleSheet.create({
   mainArea: {
     ...styles.flex,
